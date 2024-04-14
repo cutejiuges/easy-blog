@@ -1,0 +1,23 @@
+mysql:
+  host: "192.168.0.104"
+  port: 3306
+  db: easy_blog_db
+  user_name: root
+  password: root
+  config: ""
+  max_idle_conns: 10
+  max_open_conns: 100
+  max_life_time: 720
+  log_level: dev
+
+logger:
+  level: info
+  prefix: "[easy_blog] "
+  directory: "log"
+  show_line: true
+  console_log: true
+
+system:
+  host: "0.0.0.0"
+  port: 9090
+  env: dev
