@@ -2,7 +2,7 @@ package main
 
 import (
 	"cutejiuges/easy-blog/core"
-	"cutejiuges/easy-blog/global"
+	"cutejiuges/easy-blog/routers"
 )
 
 /**
@@ -16,9 +16,9 @@ func main() {
 	core.InitConf()
 	//初始化系统日志
 	core.InitLogger()
-	global.Logger.Info("111")
-	global.Logger.Warn("222")
-	global.Logger.Error("333")
 	//连接数据库
 	core.InitGorm()
+	//初始化路由
+	h := routers.InitRouter()
+	h.Spin()
 }

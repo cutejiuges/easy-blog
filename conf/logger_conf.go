@@ -13,4 +13,5 @@ type LoggerConf struct {
 	Directory  string `yaml:"directory"`
 	ShowLine   bool   `yaml:"show_line"`
 	ConsoleLog bool   `yaml:"console_log"`
+	FileLog    bool   `yaml:"file_log"`
 }

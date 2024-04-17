@@ -12,12 +12,13 @@ mysql:
 
 logger:
   level: info
-  prefix: "[easy_blog] "
+  prefix: "easy_blog"
   directory: "log"
   show_line: true
   console_log: true
+  file_log: true
 
 system:
   host: "0.0.0.0"
   port: 9090
-  env: dev
+  env: debug

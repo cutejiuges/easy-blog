@@ -4,9 +4,13 @@ import (
 	"bytes"
 	"cutejiuges/easy-blog/global"
 	"fmt"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
+	"io"
 	"os"
 	"path"
+	"time"
 )
 
 /**
@@ -28,19 +32,6 @@ type LogFormatter struct {
 }
 
 func (l *LogFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	//根据不同level展示日志的颜色
-	var levelColor int
-	switch entry.Level {
-	case logrus.DebugLevel, logrus.TraceLevel:
-		levelColor = gray
-	case logrus.WarnLevel:
-		levelColor = yellow
-	case logrus.ErrorLevel, logrus.FatalLevel, logrus.PanicLevel:
-		levelColor = red
-	default:
-		levelColor = blue
-	}
-
 	//定义输出流
 	var buffer *bytes.Buffer
 	if entry.Buffer != nil {
@@ -54,22 +45,67 @@ func (l *LogFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	timestamp := entry.Time.Format("2006-01-02 15:04:05")
 	logCfg := global.Config.Logger
 	if entry.HasCaller() {
-		//定义文件路径
+		//运行时文件路径
 		funcVal := entry.Caller.Function
 		fileVal := fmt.Sprintf("%s:%d", path.Base(entry.Caller.File), entry.Caller.Line)
 		//输出格式
-		_, _ = fmt.Fprintf(buffer, "[%s %s] \x1b[%dm[%s]\x1b[0m %s %s %s\n", logCfg.Prefix, timestamp, levelColor, entry.Level, fileVal, funcVal, entry.Message)
+		_, _ = fmt.Fprintf(buffer, "[%s] [%s] [%s] %s %s %s\n", logCfg.Prefix, timestamp, entry.Level, fileVal, funcVal, entry.Message)
 	} else {
-		_, _ = fmt.Fprintf(buffer, "[%s %s] \x1b[%dm[%s]\x1b[0m %s\n", logCfg.Prefix, timestamp, levelColor, entry.Level, entry.Message)
+		_, _ = fmt.Fprintf(buffer, "[%s] [%s] [%s] %s\n", logCfg.Prefix, timestamp, entry.Level, entry.Message)
 	}
 	return buffer.Bytes(), nil
 }
 
+func logFileCut(fileName string) *rotatelogs.RotateLogs {
+	logier, err := rotatelogs.New(
+		//切割后日志文件名
+		fileName,
+		//日志文件最大的保存时间
+		rotatelogs.WithMaxAge(30*24*time.Hour),
+		//日志切割的时间间隔
+		rotatelogs.WithRotationTime(24*time.Hour),
+	)
+	if err != nil {
+		panic(err)
+	}
+	logFileHook := lfshook.NewHook(lfshook.WriterMap{
+		logrus.InfoLevel:  logier,
+		logrus.FatalLevel: logier,
+		logrus.DebugLevel: logier,
+		logrus.WarnLevel:  logier,
+		logrus.ErrorLevel: logier,
+		logrus.PanicLevel: logier,
+	}, &LogFormatter{})
+	logrus.AddHook(logFileHook)
+	return logier
+}
+
 func InitLogger() {
+	//按时间进行切割
+	err := os.MkdirAll("/home/wujie/myFiles/GoCode/easy-blog/log", 0755)
+	if err != nil {
+		panic(err)
+	}
+	logFileName := path.Join("/home/wujie/myFiles/GoCode/easy-blog/log", "easy_blog") + ".%Y%m%d.log"
+	logFile := logFileCut(logFileName)
+
 	mLog := logrus.New()
-	mLog.SetOutput(os.Stdout)
-	mLog.SetReportCaller(global.Config.Logger.ShowLine)
+	//以自定义格式打日志
 	mLog.SetFormatter(&LogFormatter{})
+
+	//是否输出到命令行和日志文件
+	writers := []io.Writer{}
+	if global.Config.Logger.ConsoleLog {
+		writers = append(writers, os.Stdout)
+	}
+	if global.Config.Logger.FileLog {
+		writers = append(writers, logFile)
+	}
+	mLog.SetOutput(io.MultiWriter(writers...))
+
+	//显示文件名、函数名和行号
+	mLog.SetReportCaller(global.Config.Logger.ShowLine)
+
 	lvl, err := logrus.ParseLevel(global.Config.Logger.Level)
 	if err != nil {
 		lvl = logrus.InfoLevel

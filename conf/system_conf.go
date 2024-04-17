@@ -1,5 +1,7 @@
 package conf
 
+import "fmt"
+
 /**
  * @Author: cutejiuge cutejiuge@163.com
  * @Date: 2024/4/14 上午2:20
@@ -11,4 +13,8 @@ type SystemConf struct {
 	Host string `yaml:"host"`
 	Port int    `yaml:"port"`
 	Env  string `yaml:"env"`
+}
+
+func (s SystemConf) Addr() string {
+	return fmt.Sprintf("%s:%d", s.Host, s.Port)
 }

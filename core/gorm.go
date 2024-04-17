@@ -23,7 +23,7 @@ func InitGorm() {
 		panic(err)
 	}
 	global.MysqlDB = db
-	fmt.Println(global.MysqlDB)
+	global.Logger.Info(global.MysqlDB)
 }
 
 func mysqlConnect() (*gorm.DB, error) {
