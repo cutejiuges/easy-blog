@@ -1,8 +1,9 @@
 package res
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
+	"context"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 /**
@@ -13,36 +14,22 @@ import (
  */
 
 type Response struct {
-	Code int    `json:"code"`
-	Data any    `json:"data"`
-	Msg  string `json:"msg"`
+	Data     any       `json:"data"`
+	BaseResp *BaseResp `json:"base_resp"`
+}
+
+func NewResponse() *Response {
+	return &Response{
+		Data:     nil,
+		BaseResp: NewBaseResp(),
+	}
 }
 
 const (
 	SUCCESS = 0
-	ERROR   = -1
 )
 
 // Result 通用结果返回函数
-func Result(c *gin.Context, code int, data any, msg string) {
-	c.JSON(http.StatusOK, Response{
-		Code: code,
-		Data: data,
-		Msg:  msg,
-	})
-}
-
-// Ok 返回成功，但不携带任何信息
-func Ok(c *gin.Context) {
-	Result(c, SUCCESS, map[string]interface{}{}, "操作成功!")
-}
-
-// OkWithData 返回成功，携带数据
-func OkWithData(c *gin.Context, data any) {
-	Result(c, SUCCESS, data, "操作成功!")
-}
-
-// OkWithMsg 返回成功，携带消息
-func OkWithMsg(c *gin.Context, msg string) {
-	Result(c, SUCCESS, map[string]interface{}{}, msg)
+func Result(c context.Context, ctx *app.RequestContext, resp Response) {
+	ctx.JSON(consts.StatusOK, resp)
 }
