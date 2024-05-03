@@ -13,17 +13,22 @@ import (
  */
 
 type Option struct {
-	DB bool
+	NeedMigrateDB     bool
+	NeedGenerateModel bool
 }
 
 func Parse() Option {
-	db := flag.Bool("db", false, "初始化数据库")
+	migrate := flag.Bool("migrate", false, "初始化数据库")
+	generate := flag.Bool("generate", false, "生成实体类")
 	flag.Parse()
-	return Option{DB: *db}
+	return Option{
+		NeedMigrateDB:     *migrate,
+		NeedGenerateModel: *generate,
+	}
 }
 
 func NeedStop(op Option) bool {
-	if op.DB {
+	if op.NeedMigrateDB || op.NeedGenerateModel {
 		return true
 	}
 	return false
@@ -31,7 +36,12 @@ func NeedStop(op Option) bool {
 
 func SwitchOption(op Option) {
 	if NeedStop(op) {
-		GenerateDB()
+		if op.NeedMigrateDB {
+			MigrateDB()
+		}
+		if op.NeedGenerateModel {
+			GenerateModels()
+		}
 		os.Exit(0)
 	}
 }

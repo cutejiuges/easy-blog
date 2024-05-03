@@ -12,7 +12,7 @@ import (
  * @Description: 根据实体类模型生成数据库表结构
  */
 
-func GenerateDB() {
+func MigrateDB() {
 	var err error
 	global.MysqlDB.SetupJoinTable(&entities.User{}, "CollectArticles", &entities.UserCollects{})
 	global.MysqlDB.SetupJoinTable(&entities.Menu{}, "Banners", &entities.MenuBanner{})
