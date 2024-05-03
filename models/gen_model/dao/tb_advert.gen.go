@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbAdvert(db *gorm.DB, opts ...gen.DOOption) tbAdvert {
 	_tbAdvert := tbAdvert{}
 
 	_tbAdvert.tbAdvertDo.UseDB(db, opts...)
-	_tbAdvert.tbAdvertDo.UseModel(&entities.TbAdvert{})
+	_tbAdvert.tbAdvertDo.UseModel(&domain.TbAdvert{})
 
 	tableName := _tbAdvert.tbAdvertDo.TableName()
 	_tbAdvert.ALL = field.NewAsterisk(tableName)
@@ -153,17 +153,17 @@ type ITbAdvertDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbAdvertDo
 	Unscoped() ITbAdvertDo
-	Create(values ...*entities.TbAdvert) error
-	CreateInBatches(values []*entities.TbAdvert, batchSize int) error
-	Save(values ...*entities.TbAdvert) error
-	First() (*entities.TbAdvert, error)
-	Take() (*entities.TbAdvert, error)
-	Last() (*entities.TbAdvert, error)
-	Find() ([]*entities.TbAdvert, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbAdvert, err error)
-	FindInBatches(result *[]*entities.TbAdvert, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbAdvert) error
+	CreateInBatches(values []*domain.TbAdvert, batchSize int) error
+	Save(values ...*domain.TbAdvert) error
+	First() (*domain.TbAdvert, error)
+	Take() (*domain.TbAdvert, error)
+	Last() (*domain.TbAdvert, error)
+	Find() ([]*domain.TbAdvert, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbAdvert, err error)
+	FindInBatches(result *[]*domain.TbAdvert, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbAdvert) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbAdvert) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -175,9 +175,9 @@ type ITbAdvertDo interface {
 	Assign(attrs ...field.AssignExpr) ITbAdvertDo
 	Joins(fields ...field.RelationField) ITbAdvertDo
 	Preload(fields ...field.RelationField) ITbAdvertDo
-	FirstOrInit() (*entities.TbAdvert, error)
-	FirstOrCreate() (*entities.TbAdvert, error)
-	FindByPage(offset int, limit int) (result []*entities.TbAdvert, count int64, err error)
+	FirstOrInit() (*domain.TbAdvert, error)
+	FirstOrCreate() (*domain.TbAdvert, error)
+	FindByPage(offset int, limit int) (result []*domain.TbAdvert, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbAdvertDo
@@ -277,57 +277,57 @@ func (t tbAdvertDo) Unscoped() ITbAdvertDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbAdvertDo) Create(values ...*entities.TbAdvert) error {
+func (t tbAdvertDo) Create(values ...*domain.TbAdvert) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbAdvertDo) CreateInBatches(values []*entities.TbAdvert, batchSize int) error {
+func (t tbAdvertDo) CreateInBatches(values []*domain.TbAdvert, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbAdvertDo) Save(values ...*entities.TbAdvert) error {
+func (t tbAdvertDo) Save(values ...*domain.TbAdvert) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbAdvertDo) First() (*entities.TbAdvert, error) {
+func (t tbAdvertDo) First() (*domain.TbAdvert, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbAdvert), nil
+		return result.(*domain.TbAdvert), nil
 	}
 }
 
-func (t tbAdvertDo) Take() (*entities.TbAdvert, error) {
+func (t tbAdvertDo) Take() (*domain.TbAdvert, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbAdvert), nil
+		return result.(*domain.TbAdvert), nil
 	}
 }
 
-func (t tbAdvertDo) Last() (*entities.TbAdvert, error) {
+func (t tbAdvertDo) Last() (*domain.TbAdvert, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbAdvert), nil
+		return result.(*domain.TbAdvert), nil
 	}
 }
 
-func (t tbAdvertDo) Find() ([]*entities.TbAdvert, error) {
+func (t tbAdvertDo) Find() ([]*domain.TbAdvert, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbAdvert), err
+	return result.([]*domain.TbAdvert), err
 }
 
-func (t tbAdvertDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbAdvert, err error) {
-	buf := make([]*entities.TbAdvert, 0, batchSize)
+func (t tbAdvertDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbAdvert, err error) {
+	buf := make([]*domain.TbAdvert, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -335,7 +335,7 @@ func (t tbAdvertDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) er
 	return results, err
 }
 
-func (t tbAdvertDo) FindInBatches(result *[]*entities.TbAdvert, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbAdvertDo) FindInBatches(result *[]*domain.TbAdvert, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -361,23 +361,23 @@ func (t tbAdvertDo) Preload(fields ...field.RelationField) ITbAdvertDo {
 	return &t
 }
 
-func (t tbAdvertDo) FirstOrInit() (*entities.TbAdvert, error) {
+func (t tbAdvertDo) FirstOrInit() (*domain.TbAdvert, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbAdvert), nil
+		return result.(*domain.TbAdvert), nil
 	}
 }
 
-func (t tbAdvertDo) FirstOrCreate() (*entities.TbAdvert, error) {
+func (t tbAdvertDo) FirstOrCreate() (*domain.TbAdvert, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbAdvert), nil
+		return result.(*domain.TbAdvert), nil
 	}
 }
 
-func (t tbAdvertDo) FindByPage(offset int, limit int) (result []*entities.TbAdvert, count int64, err error) {
+func (t tbAdvertDo) FindByPage(offset int, limit int) (result []*domain.TbAdvert, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -406,7 +406,7 @@ func (t tbAdvertDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbAdvertDo) Delete(models ...*entities.TbAdvert) (result gen.ResultInfo, err error) {
+func (t tbAdvertDo) Delete(models ...*domain.TbAdvert) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 

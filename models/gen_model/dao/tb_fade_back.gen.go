@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbFadeBack(db *gorm.DB, opts ...gen.DOOption) tbFadeBack {
 	_tbFadeBack := tbFadeBack{}
 
 	_tbFadeBack.tbFadeBackDo.UseDB(db, opts...)
-	_tbFadeBack.tbFadeBackDo.UseModel(&entities.TbFadeBack{})
+	_tbFadeBack.tbFadeBackDo.UseModel(&domain.TbFadeBack{})
 
 	tableName := _tbFadeBack.tbFadeBackDo.TableName()
 	_tbFadeBack.ALL = field.NewAsterisk(tableName)
@@ -155,17 +155,17 @@ type ITbFadeBackDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbFadeBackDo
 	Unscoped() ITbFadeBackDo
-	Create(values ...*entities.TbFadeBack) error
-	CreateInBatches(values []*entities.TbFadeBack, batchSize int) error
-	Save(values ...*entities.TbFadeBack) error
-	First() (*entities.TbFadeBack, error)
-	Take() (*entities.TbFadeBack, error)
-	Last() (*entities.TbFadeBack, error)
-	Find() ([]*entities.TbFadeBack, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbFadeBack, err error)
-	FindInBatches(result *[]*entities.TbFadeBack, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbFadeBack) error
+	CreateInBatches(values []*domain.TbFadeBack, batchSize int) error
+	Save(values ...*domain.TbFadeBack) error
+	First() (*domain.TbFadeBack, error)
+	Take() (*domain.TbFadeBack, error)
+	Last() (*domain.TbFadeBack, error)
+	Find() ([]*domain.TbFadeBack, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbFadeBack, err error)
+	FindInBatches(result *[]*domain.TbFadeBack, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbFadeBack) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbFadeBack) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -177,9 +177,9 @@ type ITbFadeBackDo interface {
 	Assign(attrs ...field.AssignExpr) ITbFadeBackDo
 	Joins(fields ...field.RelationField) ITbFadeBackDo
 	Preload(fields ...field.RelationField) ITbFadeBackDo
-	FirstOrInit() (*entities.TbFadeBack, error)
-	FirstOrCreate() (*entities.TbFadeBack, error)
-	FindByPage(offset int, limit int) (result []*entities.TbFadeBack, count int64, err error)
+	FirstOrInit() (*domain.TbFadeBack, error)
+	FirstOrCreate() (*domain.TbFadeBack, error)
+	FindByPage(offset int, limit int) (result []*domain.TbFadeBack, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbFadeBackDo
@@ -279,57 +279,57 @@ func (t tbFadeBackDo) Unscoped() ITbFadeBackDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbFadeBackDo) Create(values ...*entities.TbFadeBack) error {
+func (t tbFadeBackDo) Create(values ...*domain.TbFadeBack) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbFadeBackDo) CreateInBatches(values []*entities.TbFadeBack, batchSize int) error {
+func (t tbFadeBackDo) CreateInBatches(values []*domain.TbFadeBack, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbFadeBackDo) Save(values ...*entities.TbFadeBack) error {
+func (t tbFadeBackDo) Save(values ...*domain.TbFadeBack) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbFadeBackDo) First() (*entities.TbFadeBack, error) {
+func (t tbFadeBackDo) First() (*domain.TbFadeBack, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbFadeBack), nil
+		return result.(*domain.TbFadeBack), nil
 	}
 }
 
-func (t tbFadeBackDo) Take() (*entities.TbFadeBack, error) {
+func (t tbFadeBackDo) Take() (*domain.TbFadeBack, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbFadeBack), nil
+		return result.(*domain.TbFadeBack), nil
 	}
 }
 
-func (t tbFadeBackDo) Last() (*entities.TbFadeBack, error) {
+func (t tbFadeBackDo) Last() (*domain.TbFadeBack, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbFadeBack), nil
+		return result.(*domain.TbFadeBack), nil
 	}
 }
 
-func (t tbFadeBackDo) Find() ([]*entities.TbFadeBack, error) {
+func (t tbFadeBackDo) Find() ([]*domain.TbFadeBack, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbFadeBack), err
+	return result.([]*domain.TbFadeBack), err
 }
 
-func (t tbFadeBackDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbFadeBack, err error) {
-	buf := make([]*entities.TbFadeBack, 0, batchSize)
+func (t tbFadeBackDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbFadeBack, err error) {
+	buf := make([]*domain.TbFadeBack, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -337,7 +337,7 @@ func (t tbFadeBackDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) 
 	return results, err
 }
 
-func (t tbFadeBackDo) FindInBatches(result *[]*entities.TbFadeBack, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbFadeBackDo) FindInBatches(result *[]*domain.TbFadeBack, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -363,23 +363,23 @@ func (t tbFadeBackDo) Preload(fields ...field.RelationField) ITbFadeBackDo {
 	return &t
 }
 
-func (t tbFadeBackDo) FirstOrInit() (*entities.TbFadeBack, error) {
+func (t tbFadeBackDo) FirstOrInit() (*domain.TbFadeBack, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbFadeBack), nil
+		return result.(*domain.TbFadeBack), nil
 	}
 }
 
-func (t tbFadeBackDo) FirstOrCreate() (*entities.TbFadeBack, error) {
+func (t tbFadeBackDo) FirstOrCreate() (*domain.TbFadeBack, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbFadeBack), nil
+		return result.(*domain.TbFadeBack), nil
 	}
 }
 
-func (t tbFadeBackDo) FindByPage(offset int, limit int) (result []*entities.TbFadeBack, count int64, err error) {
+func (t tbFadeBackDo) FindByPage(offset int, limit int) (result []*domain.TbFadeBack, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -408,7 +408,7 @@ func (t tbFadeBackDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbFadeBackDo) Delete(models ...*entities.TbFadeBack) (result gen.ResultInfo, err error) {
+func (t tbFadeBackDo) Delete(models ...*domain.TbFadeBack) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 

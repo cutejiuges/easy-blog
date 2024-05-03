@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbArticleTag(db *gorm.DB, opts ...gen.DOOption) tbArticleTag {
 	_tbArticleTag := tbArticleTag{}
 
 	_tbArticleTag.tbArticleTagDo.UseDB(db, opts...)
-	_tbArticleTag.tbArticleTagDo.UseModel(&entities.TbArticleTag{})
+	_tbArticleTag.tbArticleTagDo.UseModel(&domain.TbArticleTag{})
 
 	tableName := _tbArticleTag.tbArticleTagDo.TableName()
 	_tbArticleTag.ALL = field.NewAsterisk(tableName)
@@ -133,17 +133,17 @@ type ITbArticleTagDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbArticleTagDo
 	Unscoped() ITbArticleTagDo
-	Create(values ...*entities.TbArticleTag) error
-	CreateInBatches(values []*entities.TbArticleTag, batchSize int) error
-	Save(values ...*entities.TbArticleTag) error
-	First() (*entities.TbArticleTag, error)
-	Take() (*entities.TbArticleTag, error)
-	Last() (*entities.TbArticleTag, error)
-	Find() ([]*entities.TbArticleTag, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbArticleTag, err error)
-	FindInBatches(result *[]*entities.TbArticleTag, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbArticleTag) error
+	CreateInBatches(values []*domain.TbArticleTag, batchSize int) error
+	Save(values ...*domain.TbArticleTag) error
+	First() (*domain.TbArticleTag, error)
+	Take() (*domain.TbArticleTag, error)
+	Last() (*domain.TbArticleTag, error)
+	Find() ([]*domain.TbArticleTag, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbArticleTag, err error)
+	FindInBatches(result *[]*domain.TbArticleTag, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbArticleTag) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbArticleTag) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -155,9 +155,9 @@ type ITbArticleTagDo interface {
 	Assign(attrs ...field.AssignExpr) ITbArticleTagDo
 	Joins(fields ...field.RelationField) ITbArticleTagDo
 	Preload(fields ...field.RelationField) ITbArticleTagDo
-	FirstOrInit() (*entities.TbArticleTag, error)
-	FirstOrCreate() (*entities.TbArticleTag, error)
-	FindByPage(offset int, limit int) (result []*entities.TbArticleTag, count int64, err error)
+	FirstOrInit() (*domain.TbArticleTag, error)
+	FirstOrCreate() (*domain.TbArticleTag, error)
+	FindByPage(offset int, limit int) (result []*domain.TbArticleTag, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbArticleTagDo
@@ -257,57 +257,57 @@ func (t tbArticleTagDo) Unscoped() ITbArticleTagDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbArticleTagDo) Create(values ...*entities.TbArticleTag) error {
+func (t tbArticleTagDo) Create(values ...*domain.TbArticleTag) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbArticleTagDo) CreateInBatches(values []*entities.TbArticleTag, batchSize int) error {
+func (t tbArticleTagDo) CreateInBatches(values []*domain.TbArticleTag, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbArticleTagDo) Save(values ...*entities.TbArticleTag) error {
+func (t tbArticleTagDo) Save(values ...*domain.TbArticleTag) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbArticleTagDo) First() (*entities.TbArticleTag, error) {
+func (t tbArticleTagDo) First() (*domain.TbArticleTag, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbArticleTag), nil
+		return result.(*domain.TbArticleTag), nil
 	}
 }
 
-func (t tbArticleTagDo) Take() (*entities.TbArticleTag, error) {
+func (t tbArticleTagDo) Take() (*domain.TbArticleTag, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbArticleTag), nil
+		return result.(*domain.TbArticleTag), nil
 	}
 }
 
-func (t tbArticleTagDo) Last() (*entities.TbArticleTag, error) {
+func (t tbArticleTagDo) Last() (*domain.TbArticleTag, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbArticleTag), nil
+		return result.(*domain.TbArticleTag), nil
 	}
 }
 
-func (t tbArticleTagDo) Find() ([]*entities.TbArticleTag, error) {
+func (t tbArticleTagDo) Find() ([]*domain.TbArticleTag, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbArticleTag), err
+	return result.([]*domain.TbArticleTag), err
 }
 
-func (t tbArticleTagDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbArticleTag, err error) {
-	buf := make([]*entities.TbArticleTag, 0, batchSize)
+func (t tbArticleTagDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbArticleTag, err error) {
+	buf := make([]*domain.TbArticleTag, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -315,7 +315,7 @@ func (t tbArticleTagDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int
 	return results, err
 }
 
-func (t tbArticleTagDo) FindInBatches(result *[]*entities.TbArticleTag, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbArticleTagDo) FindInBatches(result *[]*domain.TbArticleTag, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -341,23 +341,23 @@ func (t tbArticleTagDo) Preload(fields ...field.RelationField) ITbArticleTagDo {
 	return &t
 }
 
-func (t tbArticleTagDo) FirstOrInit() (*entities.TbArticleTag, error) {
+func (t tbArticleTagDo) FirstOrInit() (*domain.TbArticleTag, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbArticleTag), nil
+		return result.(*domain.TbArticleTag), nil
 	}
 }
 
-func (t tbArticleTagDo) FirstOrCreate() (*entities.TbArticleTag, error) {
+func (t tbArticleTagDo) FirstOrCreate() (*domain.TbArticleTag, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbArticleTag), nil
+		return result.(*domain.TbArticleTag), nil
 	}
 }
 
-func (t tbArticleTagDo) FindByPage(offset int, limit int) (result []*entities.TbArticleTag, count int64, err error) {
+func (t tbArticleTagDo) FindByPage(offset int, limit int) (result []*domain.TbArticleTag, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -386,7 +386,7 @@ func (t tbArticleTagDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbArticleTagDo) Delete(models ...*entities.TbArticleTag) (result gen.ResultInfo, err error) {
+func (t tbArticleTagDo) Delete(models ...*domain.TbArticleTag) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 

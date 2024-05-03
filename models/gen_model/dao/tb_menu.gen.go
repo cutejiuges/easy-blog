@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbMenu(db *gorm.DB, opts ...gen.DOOption) tbMenu {
 	_tbMenu := tbMenu{}
 
 	_tbMenu.tbMenuDo.UseDB(db, opts...)
-	_tbMenu.tbMenuDo.UseModel(&entities.TbMenu{})
+	_tbMenu.tbMenuDo.UseModel(&domain.TbMenu{})
 
 	tableName := _tbMenu.tbMenuDo.TableName()
 	_tbMenu.ALL = field.NewAsterisk(tableName)
@@ -165,17 +165,17 @@ type ITbMenuDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbMenuDo
 	Unscoped() ITbMenuDo
-	Create(values ...*entities.TbMenu) error
-	CreateInBatches(values []*entities.TbMenu, batchSize int) error
-	Save(values ...*entities.TbMenu) error
-	First() (*entities.TbMenu, error)
-	Take() (*entities.TbMenu, error)
-	Last() (*entities.TbMenu, error)
-	Find() ([]*entities.TbMenu, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbMenu, err error)
-	FindInBatches(result *[]*entities.TbMenu, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbMenu) error
+	CreateInBatches(values []*domain.TbMenu, batchSize int) error
+	Save(values ...*domain.TbMenu) error
+	First() (*domain.TbMenu, error)
+	Take() (*domain.TbMenu, error)
+	Last() (*domain.TbMenu, error)
+	Find() ([]*domain.TbMenu, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbMenu, err error)
+	FindInBatches(result *[]*domain.TbMenu, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbMenu) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbMenu) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -187,9 +187,9 @@ type ITbMenuDo interface {
 	Assign(attrs ...field.AssignExpr) ITbMenuDo
 	Joins(fields ...field.RelationField) ITbMenuDo
 	Preload(fields ...field.RelationField) ITbMenuDo
-	FirstOrInit() (*entities.TbMenu, error)
-	FirstOrCreate() (*entities.TbMenu, error)
-	FindByPage(offset int, limit int) (result []*entities.TbMenu, count int64, err error)
+	FirstOrInit() (*domain.TbMenu, error)
+	FirstOrCreate() (*domain.TbMenu, error)
+	FindByPage(offset int, limit int) (result []*domain.TbMenu, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbMenuDo
@@ -289,57 +289,57 @@ func (t tbMenuDo) Unscoped() ITbMenuDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbMenuDo) Create(values ...*entities.TbMenu) error {
+func (t tbMenuDo) Create(values ...*domain.TbMenu) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbMenuDo) CreateInBatches(values []*entities.TbMenu, batchSize int) error {
+func (t tbMenuDo) CreateInBatches(values []*domain.TbMenu, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbMenuDo) Save(values ...*entities.TbMenu) error {
+func (t tbMenuDo) Save(values ...*domain.TbMenu) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbMenuDo) First() (*entities.TbMenu, error) {
+func (t tbMenuDo) First() (*domain.TbMenu, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMenu), nil
+		return result.(*domain.TbMenu), nil
 	}
 }
 
-func (t tbMenuDo) Take() (*entities.TbMenu, error) {
+func (t tbMenuDo) Take() (*domain.TbMenu, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMenu), nil
+		return result.(*domain.TbMenu), nil
 	}
 }
 
-func (t tbMenuDo) Last() (*entities.TbMenu, error) {
+func (t tbMenuDo) Last() (*domain.TbMenu, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMenu), nil
+		return result.(*domain.TbMenu), nil
 	}
 }
 
-func (t tbMenuDo) Find() ([]*entities.TbMenu, error) {
+func (t tbMenuDo) Find() ([]*domain.TbMenu, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbMenu), err
+	return result.([]*domain.TbMenu), err
 }
 
-func (t tbMenuDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbMenu, err error) {
-	buf := make([]*entities.TbMenu, 0, batchSize)
+func (t tbMenuDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbMenu, err error) {
+	buf := make([]*domain.TbMenu, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -347,7 +347,7 @@ func (t tbMenuDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) erro
 	return results, err
 }
 
-func (t tbMenuDo) FindInBatches(result *[]*entities.TbMenu, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbMenuDo) FindInBatches(result *[]*domain.TbMenu, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -373,23 +373,23 @@ func (t tbMenuDo) Preload(fields ...field.RelationField) ITbMenuDo {
 	return &t
 }
 
-func (t tbMenuDo) FirstOrInit() (*entities.TbMenu, error) {
+func (t tbMenuDo) FirstOrInit() (*domain.TbMenu, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMenu), nil
+		return result.(*domain.TbMenu), nil
 	}
 }
 
-func (t tbMenuDo) FirstOrCreate() (*entities.TbMenu, error) {
+func (t tbMenuDo) FirstOrCreate() (*domain.TbMenu, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMenu), nil
+		return result.(*domain.TbMenu), nil
 	}
 }
 
-func (t tbMenuDo) FindByPage(offset int, limit int) (result []*entities.TbMenu, count int64, err error) {
+func (t tbMenuDo) FindByPage(offset int, limit int) (result []*domain.TbMenu, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -418,7 +418,7 @@ func (t tbMenuDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbMenuDo) Delete(models ...*entities.TbMenu) (result gen.ResultInfo, err error) {
+func (t tbMenuDo) Delete(models ...*domain.TbMenu) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 

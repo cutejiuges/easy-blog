@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbUserCollect(db *gorm.DB, opts ...gen.DOOption) tbUserCollect {
 	_tbUserCollect := tbUserCollect{}
 
 	_tbUserCollect.tbUserCollectDo.UseDB(db, opts...)
-	_tbUserCollect.tbUserCollectDo.UseModel(&entities.TbUserCollect{})
+	_tbUserCollect.tbUserCollectDo.UseModel(&domain.TbUserCollect{})
 
 	tableName := _tbUserCollect.tbUserCollectDo.TableName()
 	_tbUserCollect.ALL = field.NewAsterisk(tableName)
@@ -149,17 +149,17 @@ type ITbUserCollectDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbUserCollectDo
 	Unscoped() ITbUserCollectDo
-	Create(values ...*entities.TbUserCollect) error
-	CreateInBatches(values []*entities.TbUserCollect, batchSize int) error
-	Save(values ...*entities.TbUserCollect) error
-	First() (*entities.TbUserCollect, error)
-	Take() (*entities.TbUserCollect, error)
-	Last() (*entities.TbUserCollect, error)
-	Find() ([]*entities.TbUserCollect, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbUserCollect, err error)
-	FindInBatches(result *[]*entities.TbUserCollect, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbUserCollect) error
+	CreateInBatches(values []*domain.TbUserCollect, batchSize int) error
+	Save(values ...*domain.TbUserCollect) error
+	First() (*domain.TbUserCollect, error)
+	Take() (*domain.TbUserCollect, error)
+	Last() (*domain.TbUserCollect, error)
+	Find() ([]*domain.TbUserCollect, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbUserCollect, err error)
+	FindInBatches(result *[]*domain.TbUserCollect, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbUserCollect) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbUserCollect) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -171,9 +171,9 @@ type ITbUserCollectDo interface {
 	Assign(attrs ...field.AssignExpr) ITbUserCollectDo
 	Joins(fields ...field.RelationField) ITbUserCollectDo
 	Preload(fields ...field.RelationField) ITbUserCollectDo
-	FirstOrInit() (*entities.TbUserCollect, error)
-	FirstOrCreate() (*entities.TbUserCollect, error)
-	FindByPage(offset int, limit int) (result []*entities.TbUserCollect, count int64, err error)
+	FirstOrInit() (*domain.TbUserCollect, error)
+	FirstOrCreate() (*domain.TbUserCollect, error)
+	FindByPage(offset int, limit int) (result []*domain.TbUserCollect, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbUserCollectDo
@@ -273,57 +273,57 @@ func (t tbUserCollectDo) Unscoped() ITbUserCollectDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbUserCollectDo) Create(values ...*entities.TbUserCollect) error {
+func (t tbUserCollectDo) Create(values ...*domain.TbUserCollect) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbUserCollectDo) CreateInBatches(values []*entities.TbUserCollect, batchSize int) error {
+func (t tbUserCollectDo) CreateInBatches(values []*domain.TbUserCollect, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbUserCollectDo) Save(values ...*entities.TbUserCollect) error {
+func (t tbUserCollectDo) Save(values ...*domain.TbUserCollect) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbUserCollectDo) First() (*entities.TbUserCollect, error) {
+func (t tbUserCollectDo) First() (*domain.TbUserCollect, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbUserCollect), nil
+		return result.(*domain.TbUserCollect), nil
 	}
 }
 
-func (t tbUserCollectDo) Take() (*entities.TbUserCollect, error) {
+func (t tbUserCollectDo) Take() (*domain.TbUserCollect, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbUserCollect), nil
+		return result.(*domain.TbUserCollect), nil
 	}
 }
 
-func (t tbUserCollectDo) Last() (*entities.TbUserCollect, error) {
+func (t tbUserCollectDo) Last() (*domain.TbUserCollect, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbUserCollect), nil
+		return result.(*domain.TbUserCollect), nil
 	}
 }
 
-func (t tbUserCollectDo) Find() ([]*entities.TbUserCollect, error) {
+func (t tbUserCollectDo) Find() ([]*domain.TbUserCollect, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbUserCollect), err
+	return result.([]*domain.TbUserCollect), err
 }
 
-func (t tbUserCollectDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbUserCollect, err error) {
-	buf := make([]*entities.TbUserCollect, 0, batchSize)
+func (t tbUserCollectDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbUserCollect, err error) {
+	buf := make([]*domain.TbUserCollect, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -331,7 +331,7 @@ func (t tbUserCollectDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch in
 	return results, err
 }
 
-func (t tbUserCollectDo) FindInBatches(result *[]*entities.TbUserCollect, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbUserCollectDo) FindInBatches(result *[]*domain.TbUserCollect, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -357,23 +357,23 @@ func (t tbUserCollectDo) Preload(fields ...field.RelationField) ITbUserCollectDo
 	return &t
 }
 
-func (t tbUserCollectDo) FirstOrInit() (*entities.TbUserCollect, error) {
+func (t tbUserCollectDo) FirstOrInit() (*domain.TbUserCollect, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbUserCollect), nil
+		return result.(*domain.TbUserCollect), nil
 	}
 }
 
-func (t tbUserCollectDo) FirstOrCreate() (*entities.TbUserCollect, error) {
+func (t tbUserCollectDo) FirstOrCreate() (*domain.TbUserCollect, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbUserCollect), nil
+		return result.(*domain.TbUserCollect), nil
 	}
 }
 
-func (t tbUserCollectDo) FindByPage(offset int, limit int) (result []*entities.TbUserCollect, count int64, err error) {
+func (t tbUserCollectDo) FindByPage(offset int, limit int) (result []*domain.TbUserCollect, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -402,7 +402,7 @@ func (t tbUserCollectDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbUserCollectDo) Delete(models ...*entities.TbUserCollect) (result gen.ResultInfo, err error) {
+func (t tbUserCollectDo) Delete(models ...*domain.TbUserCollect) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 

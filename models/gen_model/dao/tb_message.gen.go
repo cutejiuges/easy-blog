@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbMessage(db *gorm.DB, opts ...gen.DOOption) tbMessage {
 	_tbMessage := tbMessage{}
 
 	_tbMessage.tbMessageDo.UseDB(db, opts...)
-	_tbMessage.tbMessageDo.UseModel(&entities.TbMessage{})
+	_tbMessage.tbMessageDo.UseModel(&domain.TbMessage{})
 
 	tableName := _tbMessage.tbMessageDo.TableName()
 	_tbMessage.ALL = field.NewAsterisk(tableName)
@@ -171,17 +171,17 @@ type ITbMessageDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbMessageDo
 	Unscoped() ITbMessageDo
-	Create(values ...*entities.TbMessage) error
-	CreateInBatches(values []*entities.TbMessage, batchSize int) error
-	Save(values ...*entities.TbMessage) error
-	First() (*entities.TbMessage, error)
-	Take() (*entities.TbMessage, error)
-	Last() (*entities.TbMessage, error)
-	Find() ([]*entities.TbMessage, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbMessage, err error)
-	FindInBatches(result *[]*entities.TbMessage, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbMessage) error
+	CreateInBatches(values []*domain.TbMessage, batchSize int) error
+	Save(values ...*domain.TbMessage) error
+	First() (*domain.TbMessage, error)
+	Take() (*domain.TbMessage, error)
+	Last() (*domain.TbMessage, error)
+	Find() ([]*domain.TbMessage, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbMessage, err error)
+	FindInBatches(result *[]*domain.TbMessage, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbMessage) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbMessage) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -193,9 +193,9 @@ type ITbMessageDo interface {
 	Assign(attrs ...field.AssignExpr) ITbMessageDo
 	Joins(fields ...field.RelationField) ITbMessageDo
 	Preload(fields ...field.RelationField) ITbMessageDo
-	FirstOrInit() (*entities.TbMessage, error)
-	FirstOrCreate() (*entities.TbMessage, error)
-	FindByPage(offset int, limit int) (result []*entities.TbMessage, count int64, err error)
+	FirstOrInit() (*domain.TbMessage, error)
+	FirstOrCreate() (*domain.TbMessage, error)
+	FindByPage(offset int, limit int) (result []*domain.TbMessage, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbMessageDo
@@ -295,57 +295,57 @@ func (t tbMessageDo) Unscoped() ITbMessageDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbMessageDo) Create(values ...*entities.TbMessage) error {
+func (t tbMessageDo) Create(values ...*domain.TbMessage) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbMessageDo) CreateInBatches(values []*entities.TbMessage, batchSize int) error {
+func (t tbMessageDo) CreateInBatches(values []*domain.TbMessage, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbMessageDo) Save(values ...*entities.TbMessage) error {
+func (t tbMessageDo) Save(values ...*domain.TbMessage) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbMessageDo) First() (*entities.TbMessage, error) {
+func (t tbMessageDo) First() (*domain.TbMessage, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMessage), nil
+		return result.(*domain.TbMessage), nil
 	}
 }
 
-func (t tbMessageDo) Take() (*entities.TbMessage, error) {
+func (t tbMessageDo) Take() (*domain.TbMessage, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMessage), nil
+		return result.(*domain.TbMessage), nil
 	}
 }
 
-func (t tbMessageDo) Last() (*entities.TbMessage, error) {
+func (t tbMessageDo) Last() (*domain.TbMessage, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMessage), nil
+		return result.(*domain.TbMessage), nil
 	}
 }
 
-func (t tbMessageDo) Find() ([]*entities.TbMessage, error) {
+func (t tbMessageDo) Find() ([]*domain.TbMessage, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbMessage), err
+	return result.([]*domain.TbMessage), err
 }
 
-func (t tbMessageDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbMessage, err error) {
-	buf := make([]*entities.TbMessage, 0, batchSize)
+func (t tbMessageDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbMessage, err error) {
+	buf := make([]*domain.TbMessage, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -353,7 +353,7 @@ func (t tbMessageDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) e
 	return results, err
 }
 
-func (t tbMessageDo) FindInBatches(result *[]*entities.TbMessage, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbMessageDo) FindInBatches(result *[]*domain.TbMessage, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -379,23 +379,23 @@ func (t tbMessageDo) Preload(fields ...field.RelationField) ITbMessageDo {
 	return &t
 }
 
-func (t tbMessageDo) FirstOrInit() (*entities.TbMessage, error) {
+func (t tbMessageDo) FirstOrInit() (*domain.TbMessage, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMessage), nil
+		return result.(*domain.TbMessage), nil
 	}
 }
 
-func (t tbMessageDo) FirstOrCreate() (*entities.TbMessage, error) {
+func (t tbMessageDo) FirstOrCreate() (*domain.TbMessage, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbMessage), nil
+		return result.(*domain.TbMessage), nil
 	}
 }
 
-func (t tbMessageDo) FindByPage(offset int, limit int) (result []*entities.TbMessage, count int64, err error) {
+func (t tbMessageDo) FindByPage(offset int, limit int) (result []*domain.TbMessage, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -424,7 +424,7 @@ func (t tbMessageDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbMessageDo) Delete(models ...*entities.TbMessage) (result gen.ResultInfo, err error) {
+func (t tbMessageDo) Delete(models ...*domain.TbMessage) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 

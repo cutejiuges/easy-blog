@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbLoginDatum(db *gorm.DB, opts ...gen.DOOption) tbLoginDatum {
 	_tbLoginDatum := tbLoginDatum{}
 
 	_tbLoginDatum.tbLoginDatumDo.UseDB(db, opts...)
-	_tbLoginDatum.tbLoginDatumDo.UseModel(&entities.TbLoginDatum{})
+	_tbLoginDatum.tbLoginDatumDo.UseModel(&domain.TbLoginDatum{})
 
 	tableName := _tbLoginDatum.tbLoginDatumDo.TableName()
 	_tbLoginDatum.ALL = field.NewAsterisk(tableName)
@@ -165,17 +165,17 @@ type ITbLoginDatumDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbLoginDatumDo
 	Unscoped() ITbLoginDatumDo
-	Create(values ...*entities.TbLoginDatum) error
-	CreateInBatches(values []*entities.TbLoginDatum, batchSize int) error
-	Save(values ...*entities.TbLoginDatum) error
-	First() (*entities.TbLoginDatum, error)
-	Take() (*entities.TbLoginDatum, error)
-	Last() (*entities.TbLoginDatum, error)
-	Find() ([]*entities.TbLoginDatum, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbLoginDatum, err error)
-	FindInBatches(result *[]*entities.TbLoginDatum, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbLoginDatum) error
+	CreateInBatches(values []*domain.TbLoginDatum, batchSize int) error
+	Save(values ...*domain.TbLoginDatum) error
+	First() (*domain.TbLoginDatum, error)
+	Take() (*domain.TbLoginDatum, error)
+	Last() (*domain.TbLoginDatum, error)
+	Find() ([]*domain.TbLoginDatum, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbLoginDatum, err error)
+	FindInBatches(result *[]*domain.TbLoginDatum, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbLoginDatum) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbLoginDatum) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -187,9 +187,9 @@ type ITbLoginDatumDo interface {
 	Assign(attrs ...field.AssignExpr) ITbLoginDatumDo
 	Joins(fields ...field.RelationField) ITbLoginDatumDo
 	Preload(fields ...field.RelationField) ITbLoginDatumDo
-	FirstOrInit() (*entities.TbLoginDatum, error)
-	FirstOrCreate() (*entities.TbLoginDatum, error)
-	FindByPage(offset int, limit int) (result []*entities.TbLoginDatum, count int64, err error)
+	FirstOrInit() (*domain.TbLoginDatum, error)
+	FirstOrCreate() (*domain.TbLoginDatum, error)
+	FindByPage(offset int, limit int) (result []*domain.TbLoginDatum, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbLoginDatumDo
@@ -289,57 +289,57 @@ func (t tbLoginDatumDo) Unscoped() ITbLoginDatumDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbLoginDatumDo) Create(values ...*entities.TbLoginDatum) error {
+func (t tbLoginDatumDo) Create(values ...*domain.TbLoginDatum) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbLoginDatumDo) CreateInBatches(values []*entities.TbLoginDatum, batchSize int) error {
+func (t tbLoginDatumDo) CreateInBatches(values []*domain.TbLoginDatum, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbLoginDatumDo) Save(values ...*entities.TbLoginDatum) error {
+func (t tbLoginDatumDo) Save(values ...*domain.TbLoginDatum) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbLoginDatumDo) First() (*entities.TbLoginDatum, error) {
+func (t tbLoginDatumDo) First() (*domain.TbLoginDatum, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbLoginDatum), nil
+		return result.(*domain.TbLoginDatum), nil
 	}
 }
 
-func (t tbLoginDatumDo) Take() (*entities.TbLoginDatum, error) {
+func (t tbLoginDatumDo) Take() (*domain.TbLoginDatum, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbLoginDatum), nil
+		return result.(*domain.TbLoginDatum), nil
 	}
 }
 
-func (t tbLoginDatumDo) Last() (*entities.TbLoginDatum, error) {
+func (t tbLoginDatumDo) Last() (*domain.TbLoginDatum, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbLoginDatum), nil
+		return result.(*domain.TbLoginDatum), nil
 	}
 }
 
-func (t tbLoginDatumDo) Find() ([]*entities.TbLoginDatum, error) {
+func (t tbLoginDatumDo) Find() ([]*domain.TbLoginDatum, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbLoginDatum), err
+	return result.([]*domain.TbLoginDatum), err
 }
 
-func (t tbLoginDatumDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbLoginDatum, err error) {
-	buf := make([]*entities.TbLoginDatum, 0, batchSize)
+func (t tbLoginDatumDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbLoginDatum, err error) {
+	buf := make([]*domain.TbLoginDatum, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -347,7 +347,7 @@ func (t tbLoginDatumDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int
 	return results, err
 }
 
-func (t tbLoginDatumDo) FindInBatches(result *[]*entities.TbLoginDatum, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbLoginDatumDo) FindInBatches(result *[]*domain.TbLoginDatum, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -373,23 +373,23 @@ func (t tbLoginDatumDo) Preload(fields ...field.RelationField) ITbLoginDatumDo {
 	return &t
 }
 
-func (t tbLoginDatumDo) FirstOrInit() (*entities.TbLoginDatum, error) {
+func (t tbLoginDatumDo) FirstOrInit() (*domain.TbLoginDatum, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbLoginDatum), nil
+		return result.(*domain.TbLoginDatum), nil
 	}
 }
 
-func (t tbLoginDatumDo) FirstOrCreate() (*entities.TbLoginDatum, error) {
+func (t tbLoginDatumDo) FirstOrCreate() (*domain.TbLoginDatum, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbLoginDatum), nil
+		return result.(*domain.TbLoginDatum), nil
 	}
 }
 
-func (t tbLoginDatumDo) FindByPage(offset int, limit int) (result []*entities.TbLoginDatum, count int64, err error) {
+func (t tbLoginDatumDo) FindByPage(offset int, limit int) (result []*domain.TbLoginDatum, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -418,7 +418,7 @@ func (t tbLoginDatumDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbLoginDatumDo) Delete(models ...*entities.TbLoginDatum) (result gen.ResultInfo, err error) {
+func (t tbLoginDatumDo) Delete(models ...*domain.TbLoginDatum) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 

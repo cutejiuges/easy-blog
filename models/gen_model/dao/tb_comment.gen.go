@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"cutejiuges/easy-blog/models/dal/entities"
+	"cutejiuges/easy-blog/models/gen_model/domain"
 )
 
 func newTbComment(db *gorm.DB, opts ...gen.DOOption) tbComment {
 	_tbComment := tbComment{}
 
 	_tbComment.tbCommentDo.UseDB(db, opts...)
-	_tbComment.tbCommentDo.UseModel(&entities.TbComment{})
+	_tbComment.tbCommentDo.UseModel(&domain.TbComment{})
 
 	tableName := _tbComment.tbCommentDo.TableName()
 	_tbComment.ALL = field.NewAsterisk(tableName)
@@ -163,17 +163,17 @@ type ITbCommentDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITbCommentDo
 	Unscoped() ITbCommentDo
-	Create(values ...*entities.TbComment) error
-	CreateInBatches(values []*entities.TbComment, batchSize int) error
-	Save(values ...*entities.TbComment) error
-	First() (*entities.TbComment, error)
-	Take() (*entities.TbComment, error)
-	Last() (*entities.TbComment, error)
-	Find() ([]*entities.TbComment, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbComment, err error)
-	FindInBatches(result *[]*entities.TbComment, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*domain.TbComment) error
+	CreateInBatches(values []*domain.TbComment, batchSize int) error
+	Save(values ...*domain.TbComment) error
+	First() (*domain.TbComment, error)
+	Take() (*domain.TbComment, error)
+	Last() (*domain.TbComment, error)
+	Find() ([]*domain.TbComment, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbComment, err error)
+	FindInBatches(result *[]*domain.TbComment, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entities.TbComment) (info gen.ResultInfo, err error)
+	Delete(...*domain.TbComment) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -185,9 +185,9 @@ type ITbCommentDo interface {
 	Assign(attrs ...field.AssignExpr) ITbCommentDo
 	Joins(fields ...field.RelationField) ITbCommentDo
 	Preload(fields ...field.RelationField) ITbCommentDo
-	FirstOrInit() (*entities.TbComment, error)
-	FirstOrCreate() (*entities.TbComment, error)
-	FindByPage(offset int, limit int) (result []*entities.TbComment, count int64, err error)
+	FirstOrInit() (*domain.TbComment, error)
+	FirstOrCreate() (*domain.TbComment, error)
+	FindByPage(offset int, limit int) (result []*domain.TbComment, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITbCommentDo
@@ -287,57 +287,57 @@ func (t tbCommentDo) Unscoped() ITbCommentDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t tbCommentDo) Create(values ...*entities.TbComment) error {
+func (t tbCommentDo) Create(values ...*domain.TbComment) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t tbCommentDo) CreateInBatches(values []*entities.TbComment, batchSize int) error {
+func (t tbCommentDo) CreateInBatches(values []*domain.TbComment, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t tbCommentDo) Save(values ...*entities.TbComment) error {
+func (t tbCommentDo) Save(values ...*domain.TbComment) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t tbCommentDo) First() (*entities.TbComment, error) {
+func (t tbCommentDo) First() (*domain.TbComment, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbComment), nil
+		return result.(*domain.TbComment), nil
 	}
 }
 
-func (t tbCommentDo) Take() (*entities.TbComment, error) {
+func (t tbCommentDo) Take() (*domain.TbComment, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbComment), nil
+		return result.(*domain.TbComment), nil
 	}
 }
 
-func (t tbCommentDo) Last() (*entities.TbComment, error) {
+func (t tbCommentDo) Last() (*domain.TbComment, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbComment), nil
+		return result.(*domain.TbComment), nil
 	}
 }
 
-func (t tbCommentDo) Find() ([]*entities.TbComment, error) {
+func (t tbCommentDo) Find() ([]*domain.TbComment, error) {
 	result, err := t.DO.Find()
-	return result.([]*entities.TbComment), err
+	return result.([]*domain.TbComment), err
 }
 
-func (t tbCommentDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entities.TbComment, err error) {
-	buf := make([]*entities.TbComment, 0, batchSize)
+func (t tbCommentDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*domain.TbComment, err error) {
+	buf := make([]*domain.TbComment, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -345,7 +345,7 @@ func (t tbCommentDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) e
 	return results, err
 }
 
-func (t tbCommentDo) FindInBatches(result *[]*entities.TbComment, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t tbCommentDo) FindInBatches(result *[]*domain.TbComment, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -371,23 +371,23 @@ func (t tbCommentDo) Preload(fields ...field.RelationField) ITbCommentDo {
 	return &t
 }
 
-func (t tbCommentDo) FirstOrInit() (*entities.TbComment, error) {
+func (t tbCommentDo) FirstOrInit() (*domain.TbComment, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbComment), nil
+		return result.(*domain.TbComment), nil
 	}
 }
 
-func (t tbCommentDo) FirstOrCreate() (*entities.TbComment, error) {
+func (t tbCommentDo) FirstOrCreate() (*domain.TbComment, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entities.TbComment), nil
+		return result.(*domain.TbComment), nil
 	}
 }
 
-func (t tbCommentDo) FindByPage(offset int, limit int) (result []*entities.TbComment, count int64, err error) {
+func (t tbCommentDo) FindByPage(offset int, limit int) (result []*domain.TbComment, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -416,7 +416,7 @@ func (t tbCommentDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t tbCommentDo) Delete(models ...*entities.TbComment) (result gen.ResultInfo, err error) {
+func (t tbCommentDo) Delete(models ...*domain.TbComment) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 
