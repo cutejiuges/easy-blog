@@ -7,6 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"sync"
 	"time"
 )
 
@@ -17,13 +18,21 @@ import (
  * @Description: 此处完成gorm的连接和获取
  */
 
+var once sync.Once
+
 func InitGorm() {
-	db, err := mysqlConnect()
+	var (
+		db  *gorm.DB
+		err error
+	)
+	once.Do(func() {
+		db, err = mysqlConnect()
+	})
 	if err != nil {
 		panic(err)
 	}
 	global.MysqlDB = db
-	global.Logger.Info(global.MysqlDB)
+	global.Logger.Info("db初始化连接成功,", global.MysqlDB)
 }
 
 func mysqlConnect() (*gorm.DB, error) {

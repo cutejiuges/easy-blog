@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cutejiuges/easy-blog/cmd"
 	"cutejiuges/easy-blog/core"
 	"cutejiuges/easy-blog/routers"
 )
@@ -18,6 +19,9 @@ func main() {
 	core.InitLogger()
 	//连接数据库
 	core.InitGorm()
+	//解析命令行参数执行
+	option := cmd.Parse()
+	cmd.SwitchOption(option)
 	//初始化路由
 	h := routers.InitRouter()
 	h.Spin()

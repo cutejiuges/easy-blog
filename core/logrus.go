@@ -20,14 +20,6 @@ import (
  * @Description: 初始化系统日志
  */
 
-// 日志颜色设置
-const (
-	red    = 31
-	yellow = 33
-	blue   = 36
-	gray   = 37
-)
-
 type LogFormatter struct {
 }
 
