@@ -4,6 +4,7 @@ import (
 	"cutejiuges/easy-blog/global"
 	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -19,6 +20,21 @@ import (
  */
 
 var once sync.Once
+
+type myWriter struct {
+	mLog *logrus.Logger
+}
+
+// Printf 实现gorm/logger.Writer接口
+func (m *myWriter) Printf(format string, v ...interface{}) {
+	logStr := fmt.Sprintf(format, v...)
+	//记录日志
+	m.mLog.Info(logStr)
+}
+
+func newMyWriter() *myWriter {
+	return &myWriter{mLog: global.Logger}
+}
 
 func InitGorm() {
 	var (
@@ -45,10 +61,14 @@ func mysqlConnect() (*gorm.DB, error) {
 	var mysqlLogger logger.Interface
 	if global.Config.System.Env == "dev" {
 		//开发环境打印所有的sql语句
-		mysqlLogger = logger.Default.LogMode(logger.Info)
+		mysqlLogger = logger.New(newMyWriter(), logger.Config{
+			LogLevel: logger.Info,
+		})
 	} else {
-		//其他环境只打印错误的sql语句
-		mysqlLogger = logger.Default.LogMode(logger.Error)
+		//其他环境只打印警告及以上的sql语句
+		mysqlLogger = logger.New(newMyWriter(), logger.Config{
+			LogLevel: logger.Warn,
+		})
 	}
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: mysqlLogger,

@@ -8,7 +8,8 @@ package conf
  */
 
 type Config struct {
-	Mysql  MysqlConf  `yaml:"mysql"`
-	Logger LoggerConf `yaml:"logger"`
-	System SystemConf `yaml:"system"`
+	Mysql    MysqlConf    `yaml:"mysql"`
+	Logger   LoggerConf   `yaml:"logger"`
+	System   SystemConf   `yaml:"system"`
+	SiteInfo SiteInfoConf `yaml:"site_info"`
 }

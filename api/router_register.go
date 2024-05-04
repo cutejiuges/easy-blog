@@ -2,6 +2,7 @@ package api
 
 import (
 	"cutejiuges/easy-blog/api/ping"
+	"cutejiuges/easy-blog/api/site_info"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
@@ -14,4 +15,8 @@ import (
 
 func RegisterRouter(router *server.Hertz) {
 	router.GET("/ping", ping.Ping)
+
+	apiGroup := router.Group("/api")
+	apiGroup.GET("/site_info", site_info.GetSiteInfo)
+	apiGroup.PUT("/site_info", site_info.UpdateSiteInfo)
 }

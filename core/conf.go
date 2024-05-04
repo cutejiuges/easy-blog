@@ -16,8 +16,11 @@ import (
  * @Description: 读取yaml文件的配置
  */
 
+const (
+	ConfigFile = "settings.yaml"
+)
+
 func InitConf() {
-	const ConfigFile = "settings.yaml"
 	cfg := &conf.Config{}
 	yamlConf, err := ioutil.ReadFile(ConfigFile)
 	if err != nil {
